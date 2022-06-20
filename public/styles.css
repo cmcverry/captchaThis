@@ -1,0 +1,163 @@
+body {
+    margin: 0;
+    background-color: aquamarine;
+    font-family: 'Kalam'
+}
+
+#homepage_header {
+    text-align: center;
+    color: yellow;
+    letter-spacing: 10px;
+    text-shadow: -3px -3px 2px #000, 1px 1px 1px #ccc;
+}
+
+#solutionText {
+  border-width:5px;
+  margin: 0 3em 0 3em;
+  border-style: double;
+  font-size: 3em;
+  margin-top:100px;
+  text-align: center;
+}
+
+#solutionText a{
+  color: yellow;
+  text-shadow: -3px -3px 2px #000, 1px 1px 1px #ccc;
+}
+
+.inputField {
+  color: black;
+  font-size: 20px;
+}
+
+#grid_and_button {
+    overflow: hidden;
+}
+
+.grid_container {
+    padding: 20px;
+    margin: auto;
+    width: 50%;
+    height: 50%;
+}
+
+.grid_item {
+    background:white;
+    padding: 5px;
+    float: left;
+    height: 9vw;
+    margin: 1%;
+    width: 20%;
+}
+
+.popup1 {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+.popup2 {
+  margin: auto;
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+  
+  .popup1 .popuptext {
+    visibility: hidden;
+    width: 400px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    top: 125%;
+    left: 50%;
+    margin-top:50px;
+    margin-left: -160px;
+  }
+
+    .popup2 .popuptext {
+      visibility: hidden;
+      background-color: #555;
+      color: #fff;
+      width: 1000px;
+      text-align: center;
+      border-radius: 6px;
+      padding: 8px 0;
+      position: absolute;
+      z-index: 1;
+      top: 125%;
+      left: 50%;
+      margin-top: 50px;
+      margin-left: 40px;
+    }
+  
+  .popup1 .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s
+  }
+
+    .popup2 .show {
+      visibility: visible;
+      -webkit-animation: fadeIn 1s;
+      animation: fadeIn 1s
+    }
+  
+  @-webkit-keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+  
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
+  }
+
+  #togglePopup {
+      margin-top: 10px;
+  }
+
+  img {
+    height:100%;
+    width:100%;
+  }
+
+  .selected {
+    background: yellow;
+  }
+
+  #show_grid {
+    visibility: visible;
+  }
+
+  a {
+    color: white;
+  }
+
+  button {
+    display: inline-block;
+    margin-left:2px;
+    padding: 10px 15px;
+    font-size: 20px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: yellow;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+  }
+  
+  button:hover {background-color: #3e8e41}
+  
+  button:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+  }

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captcha This!</title>
+    <link rel="stylesheet" type="text/css" href="/styles.css" media="screen"/>
+    <link href='https://fonts.googleapis.com/css?family=Kalam' rel='stylesheet'>
+</head>
+<body>
+    <h1 id="homepage_header">Captcha This!</h1>
+
+    <form action="/" method="POST">
+        <fieldset>
+            <legend class="inputField">Generate Your Own Image Captcha:</legend>
+            <label class="inputField" for="search_term">Search Term:</label>
+            <input type="text" id="search_term" name="search_term" placeholder="Enter your search term">
+            <input type="submit" value="Generate">
+            <!--Embedded Javascript logic using ejs
+            Checks if key 'search' in object sent with express render exists. 
+            If it exists, creates a <p> element with value in the key:value pair -->
+            <% if (search) { %>
+            <% search.forEach(function(searchTerm) { %>
+            <p>You searched: <%= searchTerm %></p>
+            <p>(If the captcha fails to generate, then not enough search results were gathered.</p>
+            <% });} %>
+        </fieldset>
+    </form>
+
+    <button id="togglePopup" onclick="popUp(1)">Toggle Instructions
+    </button>
+    <div class="popup1">
+        <p class="popuptext" id="myPopup1">
+            Instructions:
+            <br>
+            <br>
+            1. In the above search bar, please enter a search term to generate a 4x4 image captcha! 
+            The image grid may take some time load. Note: a search term must retrieve a sufficient
+            number of results in order for a captcha to be generated. For example, the search term 
+            "32ed22ji3j2i4" will not generate a captcha.
+            <br>
+            <br>
+            2. Select images that are of or related (even loosely) to your search term. Click on images to select/unselect them (selected images have a yellow border)!
+            <br> 
+            <br>
+            3. After selecting your images, click the solve button to check your solution!
+        </p>
+    </div>
+    
+    <!--Embedded Javascript logic using ejs
+    Checks if key 'search' in object sent with express render exists. 
+    If it exists, creates a button element and associated popup-->
+    <% if (data) { %>  
+    <button id="togglePopup" onclick="popUp(2)">Toggle Image Sources
+    </button>
+    <div class="popup2">
+        <div class="popuptext" id="myPopup2">
+            <% if (data) { %>
+                <h3>Images taken from Bing:</h3>
+                <p>Top 15 query results in Bing image search</p>
+                <p>(images numbered based on grid position going left to right)</p>
+                <ol>
+                    <!--image urls listed in popup are also embedded with href and 
+                    opens new window to image url if clicked-->
+                    <% data.forEach(function(img) { %>
+                    <li><a href="<%= img.url %>" target="_blank"> <%= img.url %></a></li>
+                    <% }); %>
+                </ol>
+                <% } %>
+        </div>
+    </div>
+    <% } %>
+
+    <% if (data) { %>       
+        <button id="solved" onclick="solve()">Solve</button>
+        <% } %>
+
+    <div id="grid_and_button">
+        <div class="grid_container">
+            <!--Embedded Javascript logic using ejs
+            Checks if key 'data' in object sent with express render exists. 
+            If it exists, creates <div>s for grid images with class grid_item 
+            by interating through array contained in sent object.
+            Checks object elements contained in the array.
+            If an array object element's 'searched' is not set to 0
+            then the div used for containing that image with also have
+            the class search_term-->
+            <% if (data) { %>
+            <% data.forEach(function(img) { %>
+                <% if (img.searched == 0) { %>
+                <div class ="grid_item">
+                    <% } else { %>
+                    <div class = "grid_item search_term">
+                        <% } %>
+                        <img src = <%= img.url %>>
+                    </div>
+                    <% });} %>
+                </div>
+        </div>
+    </div>
+       
+</body>
+<script src="functions.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script>var $select = $(".grid_item").click(function(e) {
+    $(this).toggleClass("selected")
+  })</script>
+</html>
