@@ -1,9 +1,9 @@
 # Captcha_This!
 
-Captcha This! is a fun, interactive web that that uses a image scraper microservice to dynamically create a 4x4 grid of images (essentially, an image captcha) based on search term entered by a user.
+Captcha This! is a fun, interactive web that that uses an image scraper microservice to dynamically create a 4x4 grid of images (essentially, an image captcha) based on a search term entered by a user.
 
-The microservice used by this web app retrieves image URLs from the Bing Image Search API. 
-Captcha This! uses the top 15 images from a search query.
+The microservice used by Captcha This! retrieves image URLs from the Bing Image Search API. 
+Captcha This! uses the top 15 images from a search query to the microservice.
 
 Captcha This! and the microservice communicate via socket-connections. 
 Currently, the app is not web hosted and can only be run locally. 
