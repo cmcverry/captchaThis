@@ -7,7 +7,7 @@ Captcha This! uses the top 15 images from a search query to the microservice.
 
 Captcha This! and the microservice communicate via socket-connections. 
 Currently, the app is not web hosted and can only be run locally. 
-The image scraping microserivce is set to run on 127.0.0.1:4440.
+The image scraping microserivce is set to run on 127.0.0.1:4440 in a web browser.
 The Captcha This! runs on 127.0.0.1:5000.
 
 In order to play the game, a user must enter a search term, wait for the grid to load, and then select the correct images. 
