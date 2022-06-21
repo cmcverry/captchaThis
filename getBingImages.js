@@ -1,4 +1,5 @@
 // Imports
+'use strict';
 const https = require('https');
 const apiCredentials = require('./bingApiKey');
 
@@ -31,7 +32,6 @@ module.exports = {
                     for (const img in body["value"]) {
                         results.push(body["value"][img]["contentUrl"]);
                     }
-                    console.log(results)
                     resolve(results)
                 });
             })

@@ -2,7 +2,7 @@
   "name": "captcha_this",
   "version": "1.0.0",
   "description": "",
-  "main": "captcha_this.js",
+  "main": "app.js",
   "dependencies": {
     "body-parser": "^1.19.0",
     "ejs": "^3.1.6",
@@ -13,12 +13,11 @@
     "pug": "^3.0.2",
     "xhr2": "^0.2.1"
   },
-  "devDependencies": {
-    "nodemon": "^2.0.15"
-  },
+
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "node app.js",
+    "deploy": "gcloud app deploy"
   },
   "repository": {
     "type": "git",

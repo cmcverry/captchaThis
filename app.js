@@ -1,6 +1,7 @@
 // Monolithic version
 
 // Imports
+'use strict';
 
 const net = require('net');
 const express = require('express');
@@ -66,7 +67,7 @@ function createArrMix(dataArray, badDataArray, badDataArray2) {
         let toss = Math.floor((Math.random()* 5) + 1);
         if (toss < 3) {
           // Randomly picks an image url from array
-          entry = dataArray[dataArray.length * Math.random() | 0];
+          let entry = dataArray[dataArray.length * Math.random() | 0];
           // Checks that the same image is not already been added to the mixedDataArray
           while (mixedDataArray.indexOf(entry) > -1) {
             entry = dataArray[dataArray.length * Math.random() | 0];
@@ -75,7 +76,7 @@ function createArrMix(dataArray, badDataArray, badDataArray2) {
           i++;
         }
         else if (toss == 4) {
-          entry = badDataArray[badDataArray.length * Math.random() | 0];
+          let entry = badDataArray[badDataArray.length * Math.random() | 0];
           while (mixedDataArray.indexOf(entry) > -1) {
             entry = badDataArray[badDataArray.length * Math.random() | 0];
           }
@@ -83,7 +84,7 @@ function createArrMix(dataArray, badDataArray, badDataArray2) {
           i++;
         }
         else {
-          entry = badDataArray2[badDataArray2.length * Math.random() | 0];
+         let entry = badDataArray2[badDataArray2.length * Math.random() | 0];
           while (mixedDataArray.indexOf(entry) > -1) {
             entry = badDataArray2[badDataArray2.length * Math.random() | 0];
           }
@@ -97,7 +98,6 @@ function createArrMix(dataArray, badDataArray, badDataArray2) {
 
 async function renderCaptcha(req, res) {
     // If user tries to generate image grid with no search term
-  console.log(req.body.search_term);
   if (req.body.search_term == ""){
   res.render('index.ejs', {"search": "", "data": ""});
   return;
@@ -107,12 +107,12 @@ async function renderCaptcha(req, res) {
   let badDataArray = [];
   let badDataArray2 = [];
 
-  bogusSearchTerm1 = irrelevantTerms[irrelevantTerms.length * Math.random() | 0];
+  let bogusSearchTerm1 = irrelevantTerms[irrelevantTerms.length * Math.random() | 0];
   // Loops while user search term is the same as bogus search term
   while (bogusSearchTerm1 == req.body.search_term) {
     bogusSearchTerm1 = irrelevantTerms[irrelevantTerms.length * Math.random() | 0];
   }
-  bogusSearchTerm2 = irrelevantTerms[irrelevantTerms.length * Math.random() | 0];
+  let bogusSearchTerm2 = irrelevantTerms[irrelevantTerms.length * Math.random() | 0];
   while (bogusSearchTerm2 == req.body.search_term || bogusSearchTerm2 == bogusSearchTerm1) {
     bogusSearchTerm2 = irrelevantTerms[irrelevantTerms.length * Math.random() | 0];
   }
@@ -138,9 +138,11 @@ async function renderCaptcha(req, res) {
     res.render('index.ejs', {"search": searchTerm, "data": ""});
   }
   else {
-    mixedDataArray = createArrMix(dataArray, badDataArray, badDataArray2);
+   let mixedDataArray = createArrMix(dataArray, badDataArray, badDataArray2);
 
     // Renders index.ejs with object containing user search term and mixedDataArray
     res.render('index.ejs', {"search": searchTerm, "data": mixedDataArray});
   }
 }
+
+module.exports = app;

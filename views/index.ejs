@@ -23,12 +23,12 @@
             <% if (search) { %>
             <% search.forEach(function(searchTerm) { %>
             <p>You searched: <%= searchTerm %></p>
-            <p>(If the captcha fails to generate, then not enough search results were gathered.</p>
+            <p>(If the captcha fails to generate, then not enough search results were gathered. Try a different search term.)</p>
             <% });} %>
         </fieldset>
     </form>
 
-    <button id="togglePopup" onclick="popUp(1)">Toggle Instructions
+    <button id="togglePopup" onclick="popUp(1)">Instructions
     </button>
     <div class="popup1">
         <p class="popuptext" id="myPopup1">
@@ -52,7 +52,7 @@
     Checks if key 'search' in object sent with express render exists. 
     If it exists, creates a button element and associated popup-->
     <% if (data) { %>  
-    <button id="togglePopup" onclick="popUp(2)">Toggle Image Sources
+    <button id="togglePopup" onclick="popUp(2)">Show Sources
     </button>
     <div class="popup2">
         <div class="popuptext" id="myPopup2">
@@ -89,9 +89,9 @@
             <% if (data) { %>
             <% data.forEach(function(img) { %>
                 <% if (img.searched == 0) { %>
-                <div class ="grid_item">
+                <div class ="grid_item" onclick="select(this)">
                     <% } else { %>
-                    <div class = "grid_item search_term">
+                    <div class = "grid_item search_term" onclick="select(this)">
                         <% } %>
                         <img src = <%= img.url %>>
                     </div>
@@ -103,7 +103,4 @@
 </body>
 <script src="functions.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script>var $select = $(".grid_item").click(function(e) {
-    $(this).toggleClass("selected")
-  })</script>
 </html>
