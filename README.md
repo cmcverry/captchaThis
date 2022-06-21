@@ -5,6 +5,8 @@ Captcha This! is a fun, interactive web app that dynamically creates a grid of i
 Captcha This! is deployed on the Google App Engine Platform and uses the Bing Image Search API for gathering image URLs.
 From an image search via the Bing API, Captcha This! retrieves the 16 images from the top search results. Not all images used in the captcha are related to the user's search term. These unrelated images are to be gathered with program-supplied bogus search terms. 
 
+There is another version of Captcha This! that is implemented with a Python programmed microservice that performs the gathering of images. With this version, the app and microservice communicate via socket-connections and exchange JSON-formatted data. The microservice version can be found in this repository's branch "sockets." Currently, this version is not web hosted and can only be run locally. 
+
 ## URL
 https://captcha-this.ue.r.appspot.com 
 
