@@ -39,3 +39,7 @@ function solve() {
   }
   document.location.href = "correct";
 }
+
+function select(item) {
+  item.classList.toggle("selected");
+}
