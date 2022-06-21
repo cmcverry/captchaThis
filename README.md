@@ -1,10 +1,14 @@
-# Captcha_This!
+# Captcha This!
 
-This web app uses a image scraper microservice to dynamically create a 4x4 grid of images (essentially, an image captcha) based on user input.
-The microservice used by this web app pulls images from Bing image search. Specifically, the top 15 images from a search query.
-Captcha This! and the microservice communicate via sockets. Currently, the web app is set connect with the microserivce at 127.0.0.1:4440.
-The web app runs on 127.0.0.1:5000.
+Captcha This! is a fun, interactive web app that dynamically creates a grid of images (essentially, an image captcha) based on a user-entered search term.
 
+This version is not currently web hosted and can only be run locally. 
+To run locally, Python >= v3.10.5 and Node >= v16.15.1 must be installed. The web app server and microservice server must be started seperately. After successfully starting up both, navigate to 127.0.0.1:5000 in your web browser. 
+
+The microserivce and web app run on 127.0.0.1:4440 and 127.0.0.1:5000, respecfully. 
+
+## Instructions
 In order to play the game, a user must enter a search term, wait for the grid to load, and then select the correct images. 
-Image grids are always create randomlly, however, successive search terms of the same value will yield similar images, since
-the images being grabbed are always the top 15 images for that search term. 
+
+Image captcha are always generated randomlly, however, successive usage of the same search term will yield similar images, because
+the images being grabbed are the top 16 images for a search term's search results. 
