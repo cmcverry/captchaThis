@@ -13,7 +13,7 @@ const bingSearch = require('./getBingImages')
 const app = express();
 
 // Array contains bogus search terms (used for sending queries to image scraper microservice)
-const irrelevantTerms = ["car", "smile", "cargoship", "bike", "darkness", "light", 
+const bogusTerms = ["car", "smile", "cargoship", "bike", "darkness", "light", 
 "milky way", "skiing", "sky", "ocean", "aerobics", "apples", "fire", "books"]
 
 
@@ -55,39 +55,78 @@ app.listen(PORT, () => {
 });
 
 
+async function renderCaptcha(req, res) {
+  // If user tries to generate image grid with no search term
+if (req.body.search_term == ""){
+res.render('index.ejs', {"search": "", "data": ""});
+return;
+}
+// Initializes arrays used for containing image urls
+let validDataArray = [];
+let invalidDataArray = [];
+let invalidDataArray2 = [];
+
+let bogusSearchTerm1 = bogusTerms[bogusTerms.length * Math.random() | 0];
+// Loops while user search term is the same as bogus search term
+while (bogusSearchTerm1 == req.body.search_term) {
+  bogusSearchTerm1 = bogusTerms[bogusTerms.length * Math.random() | 0];
+}
+let bogusSearchTerm2 = bogusTerms[bogusTerms.length * Math.random() | 0];
+while (bogusSearchTerm2 == req.body.search_term || bogusSearchTerm2 == bogusSearchTerm1) {
+  bogusSearchTerm2 = bogusTerms[bogusTerms.length * Math.random() | 0];
+}
+
+let searchTerm = [req.body.search_term];
+validDataArray = await createImagesArr(searchTerm, 1);
+invalidDataArray = await createImagesArr(bogusSearchTerm1, 0);
+invalidDataArray2 = await createImagesArr(bogusSearchTerm2, 0);
+
+// Checks that a sufficient number of images were retrieved
+if ( validDataArray.length < 16 || invalidDataArray.length < 16 || invalidDataArray2.length < 16 ) {
+  res.render('index.ejs', {"search": searchTerm, "data": ""});
+}
+else {
+ let mixedDataArray = createArrMix(validDataArray, invalidDataArray, invalidDataArray2);
+
+  // Renders index.ejs with object containing user search term and mixedDataArray
+  res.render('index.ejs', {"search": searchTerm, "data": mixedDataArray});
+}
+}
+
+
 // Receives three arrays and creates a new a array of 16 elements
 // randomly selected from the three array arguments
 // Returns the new array
-function createArrMix(dataArray, badDataArray, badDataArray2) {
+function createArrMix(validDataArray, invalidDataArray, invalidDataArray2) {
   let mixedDataArray = [];
   let i = 0;
-      // Fills dataArray with image urls until there are 16 urls added
+      // Fills validDataArray with image urls until there are 16 urls added
       while (i < 16) {
         // Generates random number for deciding from which array an image will be taken from
         // There is a 3/5 chance, an image will be taken from the search term relevant array
         let toss = Math.floor((Math.random()* 5) + 1);
         if (toss < 3) {
           // Randomly picks an image url from array
-          let entry = dataArray[dataArray.length * Math.random() | 0];
+          let entry = validDataArray[validDataArray.length * Math.random() | 0];
           // Checks that the same image is not already been added to the mixedDataArray
           while (mixedDataArray.indexOf(entry) > -1) {
-            entry = dataArray[dataArray.length * Math.random() | 0];
+            entry = validDataArray[validDataArray.length * Math.random() | 0];
           }
           mixedDataArray.push(entry);
           i++;
         }
         else if (toss == 4) {
-          let entry = badDataArray[badDataArray.length * Math.random() | 0];
+          let entry = invalidDataArray[invalidDataArray.length * Math.random() | 0];
           while (mixedDataArray.indexOf(entry) > -1) {
-            entry = badDataArray[badDataArray.length * Math.random() | 0];
+            entry = invalidDataArray[invalidDataArray.length * Math.random() | 0];
           }
           mixedDataArray.push(entry);
           i++;
         }
         else {
-         let entry = badDataArray2[badDataArray2.length * Math.random() | 0];
+         let entry = invalidDataArray2[invalidDataArray2.length * Math.random() | 0];
           while (mixedDataArray.indexOf(entry) > -1) {
-            entry = badDataArray2[badDataArray2.length * Math.random() | 0];
+            entry = invalidDataArray2[invalidDataArray2.length * Math.random() | 0];
           }
           mixedDataArray.push(entry);
           i++;
@@ -96,54 +135,18 @@ function createArrMix(dataArray, badDataArray, badDataArray2) {
       return mixedDataArray;
 }
 
-
-async function renderCaptcha(req, res) {
-    // If user tries to generate image grid with no search term
-  if (req.body.search_term == ""){
-  res.render('index.ejs', {"search": "", "data": ""});
-  return;
+// Recieves search, a string representing a search term, and valid,
+//  a integer value indicating whether this is the user's search term
+// Calls getImages, pushes each image, represented as an object, into
+//  an array 
+// Returns array of image objects
+async function createImagesArr(search, valid) {
+  let imageArr = [];
+  let images = await bingSearch.getImages(search);
+  for (const img in images) {
+    imageArr.push({searched: valid, url: images[img]});
   }
-  // Initializes arrays used for containing image urls
-  let dataArray = [];
-  let badDataArray = [];
-  let badDataArray2 = [];
-
-  let bogusSearchTerm1 = irrelevantTerms[irrelevantTerms.length * Math.random() | 0];
-  // Loops while user search term is the same as bogus search term
-  while (bogusSearchTerm1 == req.body.search_term) {
-    bogusSearchTerm1 = irrelevantTerms[irrelevantTerms.length * Math.random() | 0];
-  }
-  let bogusSearchTerm2 = irrelevantTerms[irrelevantTerms.length * Math.random() | 0];
-  while (bogusSearchTerm2 == req.body.search_term || bogusSearchTerm2 == bogusSearchTerm1) {
-    bogusSearchTerm2 = irrelevantTerms[irrelevantTerms.length * Math.random() | 0];
-  }
-
-  let images = await bingSearch.getImages(req.body.search_term);
-  for (const url in images) {
-    dataArray.push({searched: 1, url: images[url]});
-  }
-
-  images = await bingSearch.getImages(bogusSearchTerm1);
-  for (const url in images) {
-    badDataArray.push({searched: 0, url: images[url]});
-  }
-
-  images =  await bingSearch.getImages(bogusSearchTerm2);
-  for (const url in images) {
-    badDataArray2.push({searched: 0, url: images[url]});
-  }
-
-  let searchTerm = [req.body.search_term];
-
-  if ( dataArray.length < 16 || badDataArray.length < 16 || badDataArray2.length < 16 ) {
-    res.render('index.ejs', {"search": searchTerm, "data": ""});
-  }
-  else {
-   let mixedDataArray = createArrMix(dataArray, badDataArray, badDataArray2);
-
-    // Renders index.ejs with object containing user search term and mixedDataArray
-    res.render('index.ejs', {"search": searchTerm, "data": mixedDataArray});
-  }
+  return imageArr;
 }
 
 module.exports = app;
