@@ -15,7 +15,7 @@ module.exports = {
             let request_params = {
             method : 'GET',
             hostname : host,
-            path : path + '?q=' + encodeURIComponent(search) + '&imageType=Photo&count=16',
+            path : path + '?q=' + encodeURIComponent(search) + '&imageType=Photo&count=16&license=public',
             headers : {
             'Ocp-Apim-Subscription-Key' : apiCredentials.key,
             }
@@ -30,7 +30,7 @@ module.exports = {
                 response.on('end', () => {
                     const body = JSON.parse(data);
                     for (const img in body["value"]) {
-                        results.push(body["value"][img]["contentUrl"]);
+                        results.push(body["value"][img]["thumbnailUrl"]);
                     }
                     resolve(results)
                 });
