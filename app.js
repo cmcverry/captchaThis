@@ -13,7 +13,8 @@ const bingSearch = require('./getBingImages')
 const app = express();
 
 // Array contains bogus search terms (used for sending queries to image scraper microservice)
-const irrelevantTerms = ["car", "smile", "cargoship", "bike", "darkness", "light", "milky way", "skiing", "sky", "ocean", "aerobics"]
+const irrelevantTerms = ["car", "smile", "cargoship", "bike", "darkness", "light", 
+"milky way", "skiing", "sky", "ocean", "aerobics", "apples", "fire", "books"]
 
 
 app.use(bodyParser.urlencoded({
