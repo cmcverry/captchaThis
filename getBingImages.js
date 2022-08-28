@@ -1,7 +1,9 @@
-// Imports
 'use strict';
+
+// Imports
 const https = require('https');
-const apiCredentials = require('./bingApiKey');
+const { key } = require('./secret')
+
 
 const host = 'api.bing.microsoft.com';
 const path = '/v7.0/images/search';
@@ -11,14 +13,12 @@ module.exports = {
 
         return new Promise ((resolve) => {
             let results = [];
-
-            let request_params = {
-            method : 'GET',
-            hostname : host,
-            path : path + '?q=' + encodeURIComponent(search) + '&imageType=Photo&count=16&license=public',
-            headers : {
-            'Ocp-Apim-Subscription-Key' : apiCredentials.key,
-            }
+            
+            const request_params = {
+                method : 'GET',
+                hostname : host,
+                path : path + '?q=' + encodeURIComponent(search) + '&imageType=Photo&count=16&license=public',
+                headers : { 'Ocp-Apim-Subscription-Key' : key, }
             };
 
             const request = https.request(request_params, (response) => {
