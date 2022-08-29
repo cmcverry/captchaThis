@@ -104,7 +104,7 @@ function createArrMix(validDataArray, invalidDataArray, invalidDataArray2) {
     // Generates random number for deciding from which array an image will be taken from
     // There is a 3/5 chance, an image will be taken from the search term relevant array
     let toss = Math.floor((Math.random()* 5) + 1);
-    if (toss < 3) {
+    if (toss <= 3) {
       // Randomly picks an image url from array
       let entry = validDataArray[validDataArray.length * Math.random() | 0];
       // Checks that the same image is not already been added to the mixedDataArray
