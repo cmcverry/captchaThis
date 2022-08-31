@@ -12,10 +12,12 @@ const { getImages } = require('./getBingImages')
 // Intialize Express app
 const app = express();
 
-// Array contains bogus search terms (used for sending queries to image scraper microservice)
+// Array contains bogus search terms (used for sending queries to Bing Image Search API)
 const bogusTerms = ["car", "smile", "cargoship", "bike", "darkness", "light", 
 "milky way", "skiing", "sky", "ocean", "aerobics", "apples", "fire", "books"]
 
+// Hashmap contains collections of urls for previous search terms
+let cachedUrls = new Map();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json())
@@ -64,31 +66,32 @@ async function renderCaptcha(req, res) {
   let validDataArray = [];
   let invalidDataArray = [];
   let invalidDataArray2 = [];
+  let searchTerm = req.body.search_term;
 
   let bogusSearchTerm1 = bogusTerms[bogusTerms.length * Math.random() | 0];
   // Loops while user search term is the same as bogus search term
-  while (bogusSearchTerm1 == req.body.search_term) {
+  while (bogusSearchTerm1 == searchTerm) {
     bogusSearchTerm1 = bogusTerms[bogusTerms.length * Math.random() | 0];
   }
 
   let bogusSearchTerm2 = bogusTerms[bogusTerms.length * Math.random() | 0];
-  while (bogusSearchTerm2 == req.body.search_term || bogusSearchTerm2 == bogusSearchTerm1) {
+    // Loops while user search term is the same as bogus search term
+  while (bogusSearchTerm2 == searchTerm || bogusSearchTerm2 == bogusSearchTerm1) {
     bogusSearchTerm2 = bogusTerms[bogusTerms.length * Math.random() | 0];
   }
 
-  let searchTerm = [req.body.search_term];
   validDataArray = await createImagesArr(searchTerm, 1);
   invalidDataArray = await createImagesArr(bogusSearchTerm1, 0);
   invalidDataArray2 = await createImagesArr(bogusSearchTerm2, 0);
 
   // Checks that a sufficient number of images were retrieved
   if ( validDataArray.length < 16 || invalidDataArray.length < 16 || invalidDataArray2.length < 16 ) {
-    res.render('index.ejs', {"search": searchTerm, "data": ""});
+    res.render('index.ejs', {"search": [searchTerm], "data": ""});
   } else {
   let mixedDataArray = createArrMix(validDataArray, invalidDataArray, invalidDataArray2);
 
     // Renders index.ejs with object containing user search term and mixedDataArray
-    res.render('index.ejs', {"search": searchTerm, "data": mixedDataArray});
+    res.render('index.ejs', {"search": [searchTerm], "data": mixedDataArray});
   }
 }
 
@@ -134,18 +137,28 @@ function createArrMix(validDataArray, invalidDataArray, invalidDataArray2) {
   return mixedDataArray;
 }
 
-// Recieves search, a string representing a search term, and valid,
+// Receives search, a string representing a search term, and valid,
 //  a integer value indicating whether this is the user's search term
 // Calls getImages, pushes each image, represented as an object, into
 //  an array 
 // Returns array of image objects
 async function createImagesArr(search, valid) {
   let imageArr = [];
-  let images = await getImages(search);
+  let images = checkCache(search);
+  if (images === undefined) {
+    images = await getImages(search);
+    cachedUrls.set(search, images);
+  }
   for (const img in images) {
     imageArr.push({searched: valid, url: images[img]});
   }
   return imageArr;
+}
+
+// Checks cache for previous urls for search term
+function checkCache(searched) {
+  let urls = cachedUrls.get(searched);
+  return urls
 }
 
 module.exports = app;
