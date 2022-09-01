@@ -1,18 +1,17 @@
 // Monolithic version
-
 'use strict';
 
 // Imports
 const express = require('express');
 const bodyParser = require("body-parser");
-const { renderCaptcha } = require('./serverSide/serverFunctions')
+const { renderCaptcha } = require('./serverSide/serverFunctions');
 
 
 // Intialize Express app
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 // Static Files
 app.use(express.static('public'));

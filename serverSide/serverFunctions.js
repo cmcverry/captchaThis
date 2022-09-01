@@ -1,5 +1,7 @@
-const { getImages } = require('./getBingImages')
-const { bogusTerms, cachedUrls } = require('./appData')
+'use strict';
+
+const { getImages } = require('./getBingImages');
+const { bogusTerms, cachedUrls } = require('./appData');
 
 async function renderCaptcha(req, res) {
     // If user tries to generate image grid with no search term
@@ -37,8 +39,8 @@ async function renderCaptcha(req, res) {
     let mixedDataArray = createArrMix(validDataArray, invalidDataArray, invalidDataArray2);
     
     addToBogus(searchTerm);
-      // Renders index.ejs with object containing user search term and mixedDataArray
-      res.render('index.ejs', {"search": [searchTerm], "data": mixedDataArray});
+    // Renders index.ejs with object containing user search term and mixedDataArray
+    res.render('index.ejs', {"search": [searchTerm], "data": mixedDataArray});
     }
   }
   
