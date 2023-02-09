@@ -1,3 +1,5 @@
+## Deprecated to [new version](https://github.com/cmcverry/captcha-this) with React frontend 
+
 # Captcha This
 
 Captcha This randomly generates a grid of images (essentially, an image captcha) corresponding to a user-entered search term.
